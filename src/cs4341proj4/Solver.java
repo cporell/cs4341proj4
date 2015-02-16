@@ -1,5 +1,4 @@
 package cs4341proj4;
-import java.awt.ItemSelectable;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,6 +18,7 @@ public class Solver {
 	
 	static HashMap<String, Item> items = new HashMap<String, Item>(); // All the items in this CSP
 	static HashMap<String, Bag> bags = new HashMap<String, Bag>(); // All the bags in this CSP
+	static ArrayList<Constraint> constraints = new ArrayList<Constraint>();
 	
 	public static void main(String[] args) {
 		// Read the file into memory
@@ -63,6 +63,7 @@ public class Solver {
 							int lowLim = Integer.parseInt(var[0]);
 							int hiLim = Integer.parseInt(var[1]);
 							BagFitLimit fitLimits = new BagFitLimit(lowLim, hiLim);
+							constraints.add(fitLimits);
 							break;
 					// Case 4 handles the unary inclusives
 					case 4 : 
@@ -72,6 +73,7 @@ public class Solver {
 								uiBags.add(bags.get(var[i]));
 							}
 							UnaryInclusive uiConstraint = new UnaryInclusive(uiItem, uiBags);
+							constraints.add(uiConstraint);
 							break;					
 					// Case 5 handles the unary exclusives
 					case 5 : 
@@ -81,18 +83,21 @@ public class Solver {
 								uxBags.add(bags.get(var[i]));
 							}
 							UnaryExclusive uxConstraint = new UnaryExclusive(uxItem, uxBags);
+							constraints.add(uxConstraint);
 							break;
 					// Case 6 handles the binary equals
 					case 6 : 
 							Item beItem1 = items.get(var[0]);
 							Item beItem2 = items.get(var[1]);
 							BinaryEquals beConstraint = new BinaryEquals(beItem1, beItem2);
+							constraints.add(beConstraint);
 							break;
 					// Case 7 handles the binary not equals
 					case 7 : 
 							Item bneItem1 = items.get(var[0]);
 							Item bneItem2 = items.get(var[1]);
 							BinaryNE bneConstraint = new BinaryNE(bneItem1, bneItem2);
+							constraints.add(bneConstraint);
 							break;
 					// Case 8 handles the binary mutual exclusions
 					case 8 : 
@@ -101,6 +106,7 @@ public class Solver {
 							Bag bmxBag1 = bags.get(var[2]);
 							Bag bmxBag2 = bags.get(var[3]);
 							BinaryME bmxConstraint = new BinaryME(bmxItem1, bmxItem2, bmxBag1, bmxBag2);
+							constraints.add(bmxConstraint);
 					}
 				}
 			}
