@@ -107,6 +107,7 @@ public class Solver {
 							Bag bmxBag2 = bags.get(var[3]);
 							BinaryME bmxConstraint = new BinaryME(bmxItem1, bmxItem2, bmxBag1, bmxBag2);
 							constraints.add(bmxConstraint);
+							break;
 					}
 				}
 			}
