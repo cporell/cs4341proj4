@@ -28,6 +28,10 @@ public class Solver {
 		parseFile(args[0]);
 	}
 
+	/*
+	 * Parses a text file from the command line to get the variables, values, and constraints
+	 * for this CSP.
+	 */
 	private static void parseFile(String file) {
 		String line = null;
 		int fileSection = 0;
@@ -106,6 +110,20 @@ public class Solver {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
+		}
+	}
+	
+	/*
+	 * Writes out the solution to a solved CSP on the command line.
+	 * NOTE: The "no solution" option isn't accounted for in this function, as the program will only get here
+	 * if there actually is a solution.
+	 */
+	private static void writeOutput() {
+		for(Bag b : bags.values()){
+			System.out.println(b.writeItems());
+			System.out.println("number of items: " + b.items.size());
+			System.out.println("total weight/capacity of the bag: " + b.capacity + "/" + b.weightLimit);
+			System.out.println("wasted capacity: " + b.calcWastedCapacity() + "\n");
 		}
 	}
 }
