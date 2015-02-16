@@ -42,10 +42,9 @@ public class Solver {
 			in = new FileReader(file);
 			buf = new BufferedReader(in);
 			while((line = buf.readLine()) != null) {
-				if(line.substring(0, 4).equals("#####")) {
+				if(line.contains("#####")) {
 					fileSection++;
-				}
-				else {
+				} else {
 					String[] var = line.split(" ");
 					switch(fileSection){
 					// Case 1 handles the variables (items)
