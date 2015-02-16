@@ -5,5 +5,11 @@
  */
 
 public class BagFitLimit extends Constraint{
-
+	int lowerLimit;
+	int higherLimit;
+	
+	public BagFitLimit(int low, int high) {
+		this.lowerLimit = low;
+		this.higherLimit = high;
+	}
 }
