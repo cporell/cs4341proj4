@@ -1,3 +1,4 @@
+package cs4341proj4;
 import java.util.HashMap;
 
 /*

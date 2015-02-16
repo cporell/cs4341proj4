@@ -1,3 +1,4 @@
+package cs4341proj4;
 /*
  * CS 4341
  * Project 4 - CSP

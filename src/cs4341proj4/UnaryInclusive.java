@@ -1,3 +1,4 @@
+package cs4341proj4;
 import java.util.ArrayList;
 
 /*
@@ -6,11 +7,11 @@ import java.util.ArrayList;
  * Connor Porell and Andrew Roskuski
  */
 
-public class UnaryExclusive extends Constraint {
+public class UnaryInclusive extends Constraint {
 	Item item;
 	ArrayList<Bag> bags = new ArrayList<Bag>();
 	
-	public UnaryExclusive(Item item, ArrayList<Bag> bags) {
+	public UnaryInclusive(Item item, ArrayList<Bag> bags){
 		this.item = item;
 		this.bags = bags;
 	}
