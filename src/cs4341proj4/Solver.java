@@ -15,25 +15,29 @@ import java.util.HashMap;
 
 // Solver is the main class, runs the CSP
 public class Solver {
+	public enum SolverType{
+    	BACKTRACKING, MVR, LEASTCONSTRAINING
+    }
 	
-	static HashMap<String, Item> items = new HashMap<String, Item>(); // All the items in this CSP
-	static HashMap<String, Bag> bags = new HashMap<String, Bag>(); // All the bags in this CSP
-	static ArrayList<Constraint> constraints = new ArrayList<Constraint>();
+	HashMap<String, Item> items = new HashMap<String, Item>(); // All the items in this CSP
+	HashMap<String, Bag> bags = new HashMap<String, Bag>(); // All the bags in this CSP
+    ArrayList<Constraint> constraints = new ArrayList<Constraint>();
+    SolverType type;
+    
 	
-	public static void main(String[] args) {
-		// Read the file into memory
-		if(args.length != 1){
-			System.out.println("Expected only 1 argument.");
-			return;
-		}
-		parseFile(args[0]);
+	public Solver(String in, SolverType type) {
+		this.items = new HashMap<String, Item>(); // All the items in this CSP
+		this.bags = new HashMap<String, Bag>(); // All the bags in this CSP
+	    this.constraints = new ArrayList<Constraint>();
+	    this.type = type;
+		parseFile(in);
 	}
 
 	/*
 	 * Parses a text file from the command line to get the variables, values, and constraints
 	 * for this CSP.
 	 */
-	private static void parseFile(String file) {
+	private void parseFile(String file) {
 		String line = null;
 		int fileSection = 0;
 		FileReader in;
@@ -125,12 +129,50 @@ public class Solver {
 	 * NOTE: The "no solution" option isn't accounted for in this function, as the program will only get here
 	 * if there actually is a solution.
 	 */
-	private static void writeOutput() {
+	private void writeOutput() {
 		for(Bag b : bags.values()){
 			System.out.println(b.writeItems());
 			System.out.println("number of items: " + b.items.size());
 			System.out.println("total weight/capacity of the bag: " + b.capacity + "/" + b.weightLimit);
 			System.out.println("wasted capacity: " + b.calcWastedCapacity() + "\n");
 		}
+	}
+	
+	public void solve(){
+		boolean solveable;
+		switch (type){
+		case BACKTRACKING:
+			solveable = backtrackingSolve();
+			break;
+		case LEASTCONSTRAINING:
+			solveable = leastConstrainingSolve();
+			break;
+		case MVR:
+			solveable = MVRSolve();
+			break;
+		default:
+			solveable = false;
+			break;
+		
+		}
+		
+		if(solveable){
+			writeOutput();
+		} else {
+			System.out.println("No Solveable Assignment");
+		}
+		
+	}
+	
+	private boolean backtrackingSolve(){
+		return false;
+	}
+	
+	private boolean MVRSolve(){
+		return false;
+	}
+	
+	private boolean leastConstrainingSolve(){
+		return false;
 	}
 }
