@@ -1,10 +1,14 @@
 package cs4341proj4;
+
+import java.util.HashMap;
+
 /*
  * CS 4341
  * Project 4 - CSP
  * Connor Porell and Andrew Roskuski
  */
 
-public abstract class Constraint {
+public interface Constraint {
 	
+	boolean checkConstraint(HashMap<String, Bag> bags);
 }

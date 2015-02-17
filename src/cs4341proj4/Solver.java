@@ -22,6 +22,7 @@ public class Solver {
 	HashMap<String, Item> items = new HashMap<String, Item>(); // All the items in this CSP
 	HashMap<String, Bag> bags = new HashMap<String, Bag>(); // All the bags in this CSP
     ArrayList<Constraint> constraints = new ArrayList<Constraint>();
+    BagFitLimit bfl;
     SolverType type;
     
 	
@@ -66,7 +67,7 @@ public class Solver {
 							int lowLim = Integer.parseInt(var[0]);
 							int hiLim = Integer.parseInt(var[1]);
 							BagFitLimit fitLimits = new BagFitLimit(lowLim, hiLim);
-							constraints.add(fitLimits);
+							bfl = fitLimits;
 							break;
 					// Case 4 handles the unary inclusives
 					case 4 : 
@@ -114,6 +115,16 @@ public class Solver {
 					}
 				}
 			}
+			if (items.size() == 0 || bags.size() == 0){
+				System.exit(1);
+			}
+			if (bfl == null){
+				bfl = new BagFitLimit(Integer.MIN_VALUE, Integer.MAX_VALUE);
+			}
+			
+			for(Bag b: bags.values()){
+				b.setCapacity(bfl.higherLimit);
+			}
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -133,7 +144,7 @@ public class Solver {
 		for(Bag b : bags.values()){
 			System.out.println(b.writeItems());
 			System.out.println("number of items: " + b.items.size());
-			System.out.println("total weight/capacity of the bag: " + b.capacity + "/" + b.weightLimit);
+			System.out.println("total weight/capacity of the bag: " + b.weightused() + "/" + b.weightLimit);
 			System.out.println("wasted capacity: " + b.calcWastedCapacity() + "\n");
 		}
 	}
@@ -142,7 +153,7 @@ public class Solver {
 		boolean solveable;
 		switch (type){
 		case BACKTRACKING:
-			solveable = backtrackingSolve();
+			solveable = backtrackingSolve(items);
 			break;
 		case LEASTCONSTRAINING:
 			solveable = leastConstrainingSolve();
@@ -164,7 +175,33 @@ public class Solver {
 		
 	}
 	
-	private boolean backtrackingSolve(){
+	private boolean backtrackingSolve(HashMap<String, Item> items){
+		//System.out.println(items.size() + " items in HashMap");
+		if(items.size() == 0){
+			//System.out.println("Got to terminating clause");
+			return bfl.checkConstraint(bags);
+		}
+		for(Item i : items.values()){
+			for(Bag b : bags.values()){
+				boolean consistent = b.assign(i);
+				//System.out.println("consistent = " + consistent);
+				consistent = consistent && checkConstraints();
+				//System.out.println("consistent = " + consistent);
+				if(!consistent){
+					b.unassign(i.name);
+				} else {
+					//writeOutput();
+					HashMap<String, Item> temp = new HashMap<String, Item>();
+					temp.putAll(items);
+					temp.remove(i.name);
+					boolean result = backtrackingSolve(temp);
+					if (result){
+						return true;
+					}
+				}
+			}
+			
+		}
 		return false;
 	}
 	
@@ -174,5 +211,13 @@ public class Solver {
 	
 	private boolean leastConstrainingSolve(){
 		return false;
+	}
+	
+	private boolean checkConstraints(){
+		boolean pass = true;
+		for (Constraint c : constraints){
+			c.checkConstraint(bags);
+		}
+		return pass;
 	}
 }
