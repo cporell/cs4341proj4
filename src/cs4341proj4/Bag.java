@@ -7,11 +7,12 @@ import java.util.HashMap;
  * Connor Porell and Andrew Roskuski
  */
 
-public class Bag {
+public class Bag implements Comparable<Bag>{
 	String name; // Name of the bag
 	int weightLimit; // The weight of the items in the bag cannot exceed this
 	int capacity;
 	HashMap<String, Item> items = new HashMap<String, Item>();
+	int possibleAssignments = 0;
 	
 	// Create a new bag
 	public Bag(String name, int weightLimit){
@@ -87,5 +88,11 @@ public class Bag {
 			weight += i.weight;
 		}
 		return weight;
+	}
+
+	@Override
+	public int compareTo(Bag o) {
+		// TODO Auto-generated method stub
+		return this.possibleAssignments - o.possibleAssignments;
 	}
 }

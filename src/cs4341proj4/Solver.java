@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 /*
@@ -16,7 +18,7 @@ import java.util.HashMap;
 // Solver is the main class, runs the CSP
 public class Solver {
 	public enum SolverType{
-    	BACKTRACKING, MVR, LEASTCONSTRAINING
+    	BACKTRACKING, MRV, LEASTCONSTRAINING
     }
 	
 	HashMap<String, Item> items = new HashMap<String, Item>(); // All the items in this CSP
@@ -151,21 +153,9 @@ public class Solver {
 	
 	public void solve(){
 		boolean solveable;
-		switch (type){
-		case BACKTRACKING:
-			solveable = backtrackingSolve(items);
-			break;
-		case LEASTCONSTRAINING:
-			solveable = leastConstrainingSolve();
-			break;
-		case MVR:
-			solveable = MVRSolve();
-			break;
-		default:
-			solveable = false;
-			break;
 		
-		}
+		
+		solveable = backtrackingSolve(items);
 		
 		if(solveable){
 			writeOutput();
@@ -181,8 +171,54 @@ public class Solver {
 			//System.out.println("Got to terminating clause");
 			return bfl.checkConstraint(bags);
 		}
-		for(Item i : items.values()){
-			for(Bag b : bags.values()){
+		for(Item i: items.values()){
+			items.put(i.name, new Item(i.name, i.weight));
+		}
+		for(Item i: items.values()){
+			for(Bag b: bags.values()){
+				boolean consistent = b.assign(i);
+				consistent = consistent && checkConstraints();
+				if(consistent){
+					i.bags.put(b.name, b);
+				}
+				b.unassign(i.name);
+			}
+		}
+		for(Item i: items.values()){
+			if(i.bags.size() == 0){
+				return false;
+			}
+		}
+		Item[] temparray = new Item[items.size()];
+		temparray = (items.values().toArray(temparray));
+		ArrayList<Item> itemarray = new ArrayList<Item> (Arrays.asList(temparray));
+		if(type == SolverType.MRV){
+			Collections.sort(itemarray);
+		}
+		for(Item i : itemarray){
+			Bag[] tempbarray = new Bag[i.bags.size()];
+			tempbarray = (i.bags.values().toArray(tempbarray));
+			ArrayList<Bag> bagarray = new ArrayList<Bag> (Arrays.asList(tempbarray));
+			if (type == SolverType.LEASTCONSTRAINING){
+				for(Bag b: bagarray){
+					b.assign(i);
+					for(Item i2: items.values()){
+						if(i2 != i){
+						for(Bag b2: bags.values()){
+							boolean consistent = b2.assign(i2);
+							consistent = consistent && checkConstraints();
+							if(consistent){
+								b.possibleAssignments++;
+							}
+							b2.unassign(i2.name);
+						}
+						}
+					}
+					b.unassign(i.name);
+				}
+				Collections.sort(bagarray, Collections.reverseOrder());
+			}
+			for(Bag b : bagarray){
 				boolean consistent = b.assign(i);
 				//System.out.println("consistent = " + consistent);
 				consistent = consistent && checkConstraints();
@@ -197,6 +233,8 @@ public class Solver {
 					boolean result = backtrackingSolve(temp);
 					if (result){
 						return true;
+					} else {
+						b.unassign(i.name);
 					}
 				}
 			}
@@ -204,14 +242,7 @@ public class Solver {
 		}
 		return false;
 	}
-	
-	private boolean MVRSolve(){
-		return false;
-	}
-	
-	private boolean leastConstrainingSolve(){
-		return false;
-	}
+
 	
 	private boolean checkConstraints(){
 		boolean pass = true;
