@@ -135,6 +135,13 @@ public class Solver {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		for(Item i: items.values()){
+			for(Constraint c: constraints){
+				if(c.isInConstraint(i.name)){
+					i.constraints++;
+				}
+			}
+		}
 	}
 	
 	/*

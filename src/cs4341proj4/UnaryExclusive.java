@@ -35,4 +35,9 @@ public class UnaryExclusive implements Constraint {
 		}
 		return true;
 	}
+
+	@Override
+	public boolean isInConstraint(String itemname) {
+		return item.name.equals(itemname);
+	}
 }

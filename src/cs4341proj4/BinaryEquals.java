@@ -41,4 +41,9 @@ public class BinaryEquals implements Constraint {
 		}
 		return true;
 	}
+
+	@Override
+	public boolean isInConstraint(String itemname) {
+		return item1.name.equals(itemname) || item2.name.equals(itemname);
+	}
 }

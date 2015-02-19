@@ -11,4 +11,5 @@ import java.util.HashMap;
 public interface Constraint {
 	
 	boolean checkConstraint(HashMap<String, Bag> bags);
+	boolean isInConstraint(String itemname);
 }

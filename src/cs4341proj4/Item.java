@@ -12,6 +12,7 @@ public class Item implements Comparable<Item>{
 	String name; // Name of the item
 	int weight; // Weight of the item in kg
 	HashMap<String, Bag> bags;
+	int constraints = 0;
 	
 	public Item(String name, int weight) {
 		this.name = name;
@@ -21,6 +22,10 @@ public class Item implements Comparable<Item>{
 
 	@Override
 	public int compareTo(Item i) {
-		return this.bags.size() - i.bags.size();
+		if(this.bags.size() - i.bags.size() != 0){
+			return this.bags.size() - i.bags.size();
+		} else {
+			return this.constraints - i.constraints;
+		}
 	}
 }
