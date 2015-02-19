@@ -150,6 +150,7 @@ public class Solver {
 	 * if there actually is a solution.
 	 */
 	private void writeOutput() {
+		System.out.println();
 		for(Bag b : bags.values()){
 			System.out.println(b.writeItems());
 			System.out.println("number of items: " + b.items.size());
@@ -226,6 +227,7 @@ public class Solver {
 				Collections.sort(bagarray, Collections.reverseOrder());
 			}
 			for(Bag b : bagarray){
+				System.out.println("Checking Item " + i.name + " in bag " + b.name);
 				boolean consistent = b.assign(i);
 				//System.out.println("consistent = " + consistent);
 				consistent = consistent && checkConstraints();
