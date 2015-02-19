@@ -17,22 +17,25 @@ import java.util.HashMap;
 
 // Solver where the heavy lifting happens
 public class Solver {
-	public enum SolverType{
-    	BACKTRACKING, MRV, LEASTCONSTRAINING
-    }
 	
 	HashMap<String, Item> items = new HashMap<String, Item>(); // All the items in this CSP
 	HashMap<String, Bag> bags = new HashMap<String, Bag>(); // All the bags in this CSP
     ArrayList<Constraint> constraints = new ArrayList<Constraint>();
     BagFitLimit bfl;
-    SolverType type;
+    //SolverType type;
+    boolean MRV;
+    boolean LCV;
+    boolean forward;
     
 	
-	public Solver(String in, SolverType type) {
+	public Solver(String in, boolean MRV, boolean LCV, boolean forward) {
 		this.items = new HashMap<String, Item>(); // All the items in this CSP
 		this.bags = new HashMap<String, Bag>(); // All the bags in this CSP
 	    this.constraints = new ArrayList<Constraint>();
-	    this.type = type;
+	    //this.type = type;
+	    this.MRV = MRV;
+	    this.LCV = LCV;
+	    this.forward = forward;
 		parseFile(in);
 	}
 
@@ -197,17 +200,19 @@ public class Solver {
 				b.unassign(i.name);
 			}
 		}
-		//Forward Pruning - terminate if an item has no valid values
-		for(Item i: items.values()){
-			if(i.bags.size() == 0){
-				return false;
+		//Forward Checking - terminate if an item has no valid values
+		if(forward){
+			for(Item i: items.values()){
+				if(i.bags.size() == 0){
+					//return false;
+				}
 			}
 		}
 		Item[] temparray = new Item[items.size()];
 		temparray = (items.values().toArray(temparray));
 		ArrayList<Item> itemarray = new ArrayList<Item> (Arrays.asList(temparray));
 		//If MRV, sort array
-		if(type == SolverType.MRV){
+		if(MRV){
 			Collections.sort(itemarray);
 		}
 		for(Item i : itemarray){
@@ -215,7 +220,7 @@ public class Solver {
 			tempbarray = (i.bags.values().toArray(tempbarray));
 			ArrayList<Bag> bagarray = new ArrayList<Bag> (Arrays.asList(tempbarray));
 			//If LCV, sort bag array
-			if (type == SolverType.LEASTCONSTRAINING){
+			if (LCV){
 				for(Bag b: bagarray){
 					b.assign(i);
 					for(Item i2: items.values()){
