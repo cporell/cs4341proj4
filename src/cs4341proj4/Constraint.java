@@ -8,6 +8,9 @@ import java.util.HashMap;
  * Connor Porell and Andrew Roskuski
  */
 
+/*
+ * Constraint interface serves as a way for all the different types of constraints to inherit some important functions
+ */
 public interface Constraint {
 	
 	boolean checkConstraint(HashMap<String, Bag> bags);

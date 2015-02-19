@@ -8,6 +8,9 @@ import java.util.HashMap;
  * Connor Porell and Andrew Roskuski
  */
 
+/*
+ * BinaryEquals Constraint ensures two items are in the same bag.
+ */
 public class BinaryEquals implements Constraint {
 	Item item1;
 	Item item2;
@@ -17,6 +20,9 @@ public class BinaryEquals implements Constraint {
 		this.item2 = item2;
 	}
 
+	/*
+	 * Checks all the bags to make sure that if item1 exists in a bag, then item2 exists in it as well
+	 */
 	@Override
 	public boolean checkConstraint(HashMap<String, Bag> bags) {
 		// TODO Auto-generated method stub
@@ -42,6 +48,9 @@ public class BinaryEquals implements Constraint {
 		return true;
 	}
 
+	/*
+	 * Checks to see if a given item is in this constraint
+	 */
 	@Override
 	public boolean isInConstraint(String itemname) {
 		return item1.name.equals(itemname) || item2.name.equals(itemname);

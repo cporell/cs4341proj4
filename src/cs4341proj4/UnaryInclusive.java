@@ -8,6 +8,9 @@ import java.util.HashMap;
  * Connor Porell and Andrew Roskuski
  */
 
+/*
+ * UnaryInclusive Constraint states that an item must be assigned to one of the indicated bags.
+ */
 public class UnaryInclusive implements Constraint {
 	Item item;
 	ArrayList<Bag> bags = new ArrayList<Bag>();
@@ -17,6 +20,9 @@ public class UnaryInclusive implements Constraint {
 		this.bags = bags;
 	}
 
+	/*
+	 * Checks to make sure that the item is in one of the indicated bags.
+	 */
 	@Override
 	public boolean checkConstraint(HashMap<String, Bag> bags) {
 		for(Bag b : bags.values()){
@@ -35,7 +41,10 @@ public class UnaryInclusive implements Constraint {
 		}
 		return true;
 	}
-
+	
+	/*
+	 * Checks to make sure that an item is in this constraint
+	 */
 	@Override
 	public boolean isInConstraint(String itemname) {
 		return item.name.equals(itemname);

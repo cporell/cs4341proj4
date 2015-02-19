@@ -265,7 +265,9 @@ public class Solver {
 		return false;
 	}
 
-	
+	/*
+	 * Check constraints on all the bags in this CSP.
+	 */
 	private boolean checkConstraints(){
 		boolean pass = true;
 		for (Constraint c : constraints){

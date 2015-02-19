@@ -7,6 +7,11 @@ import java.util.HashMap;
  * Connor Porell and Andrew Roskuski
  */
 
+/*
+ * Bag class represents the values of this CSP
+ * Each bag has a name and a weight limit (both given by the input file), as well as a current capacity 
+ * and a count of the items in it
+ */
 public class Bag implements Comparable<Bag>{
 	String name; // Name of the bag
 	int weightLimit; // The weight of the items in the bag cannot exceed this
@@ -43,6 +48,9 @@ public class Bag implements Comparable<Bag>{
 		return wastedCapacity;
 	}
 	
+	/*
+	 * Calculates the current used capacity of a bag
+	 */
 	private int usedCapacity(){
 		int usedCapacity = 0;
 		for(Item i : items.values()){
@@ -51,6 +59,10 @@ public class Bag implements Comparable<Bag>{
 		return usedCapacity;
 	}
 	
+	/*
+	 * Assigns an item i to the bag
+	 * Does some validation checking first to make sure the item acutally fits in the bag
+	 */
 	public boolean assign(Item i){
 		items.put(i.name, i);
 		if(usedCapacity() > weightLimit){
@@ -62,10 +74,16 @@ public class Bag implements Comparable<Bag>{
 		return true;
 	}
 	
+	/*
+	 * Removes the item i from the bag
+	 */
 	public void unassign(String i){
 		items.remove(i);
 	}
 	
+	/*
+	 * Checks to see if the bag contains a specific item
+	 */
 	public boolean contains(String s){
 		if(items.get(s) != null){
 			return true;
@@ -74,14 +92,23 @@ public class Bag implements Comparable<Bag>{
 		}
 	}
 	
+	/*
+	 * Returns the number of items in the bag
+	 */
 	public int numitems(){
 		return items.entrySet().size();
 	}
 	
+	/*
+	 * Sets the weight capacity of this bag 
+	 */
 	public void setCapacity(int capacity){
 		this.capacity = capacity;
 	}
 	
+	/*
+	 * Calculates the amount of weight used in this bag
+	 */
 	public int weightused(){
 		int weight = 0;
 		for(Item i : items.values()){
@@ -90,6 +117,10 @@ public class Bag implements Comparable<Bag>{
 		return weight;
 	}
 
+	/*
+	 * Compares this bag to another bag.
+	 * Returns the difference between their possible assignments (0 means identical)
+	 */
 	@Override
 	public int compareTo(Bag o) {
 		// TODO Auto-generated method stub

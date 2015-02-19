@@ -1,7 +1,9 @@
 package cs4341proj4;
 
-//import cs4341proj4.Solver.SolverType;
-
+/*
+ * The main class for this CSP.
+ * It handles command-line arguments and decides what solvers to run (e.g. backtracking, MRV, etc)
+ */
 public class SolverMain {
 
 	public static void main(String[] args) {
@@ -19,7 +21,6 @@ public class SolverMain {
 		} else {
 			s = new Solver(args[0],true, true, true);
 		}
-		//Solver s = new Solver(args[0],SolverType.BACKTRACKING);
 
 		s.solve();
 	}

@@ -8,6 +8,9 @@ import java.util.HashMap;
  * Connor Porell and Andrew Roskuski
  */
 
+/*
+ * UnaryExclusive constraint states that the item cannot be assigned to any of these bags.
+ */
 public class UnaryExclusive implements Constraint {
 	Item item;
 	ArrayList<Bag> bags = new ArrayList<Bag>();
@@ -17,6 +20,9 @@ public class UnaryExclusive implements Constraint {
 		this.bags = bags;
 	}
 
+	/*
+	 * Checks to make sure that the item is not in any of the bags in this constraint.
+	 */
 	@Override
 	public boolean checkConstraint(HashMap<String, Bag> bags) {
 		for(Bag b : bags.values()){
@@ -36,6 +42,9 @@ public class UnaryExclusive implements Constraint {
 		return true;
 	}
 
+	/*
+	 * Checks to make sure that an item is in this constraint
+	 */
 	@Override
 	public boolean isInConstraint(String itemname) {
 		return item.name.equals(itemname);

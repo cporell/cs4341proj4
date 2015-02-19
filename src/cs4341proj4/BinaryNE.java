@@ -8,6 +8,9 @@ import java.util.HashMap;
  * Connor Porell and Andrew Roskuski
  */
 
+/*
+ * BinaryNotEquals Constraint states that item1 and item2 cannot be in the same bag
+ */
 public class BinaryNE implements Constraint {
 	Item item1;
 	Item item2;
@@ -17,6 +20,9 @@ public class BinaryNE implements Constraint {
 		this.item2 = item2;
 	}
 
+	/*
+	 * Checks to make sure that item1 is not in the same bag as item2
+	 */
 	@Override
 	public boolean checkConstraint(HashMap<String, Bag> bags) {
 		boolean item1found = false;
@@ -38,6 +44,9 @@ public class BinaryNE implements Constraint {
 		return true;
 	}
 
+	/*
+	 * Checks to make sure that an item is in this constraint
+	 */
 	@Override
 	public boolean isInConstraint(String itemname) {
 		return item1.name.equals(itemname) || item2.name.equals(itemname);
