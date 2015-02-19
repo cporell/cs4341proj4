@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 
 
-// Solver is the main class, runs the CSP
+// Solver where the heavy lifting happens
 public class Solver {
 	public enum SolverType{
     	BACKTRACKING, MRV, LEASTCONSTRAINING
@@ -159,9 +159,9 @@ public class Solver {
 		}
 	}
 	
+	// Solves the CSP and prints the results
 	public void solve(){
-		boolean solveable;
-		
+		boolean solveable;	
 		
 		solveable = backtrackingSolve(items);
 		
@@ -173,15 +173,20 @@ public class Solver {
 		
 	}
 	
+	/*
+	 * Recursively solves The CSP according to the settings for items in the given HashMap
+	 */
 	private boolean backtrackingSolve(HashMap<String, Item> items){
 		//System.out.println(items.size() + " items in HashMap");
 		if(items.size() == 0){
 			//System.out.println("Got to terminating clause");
 			return bfl.checkConstraint(bags);
 		}
+		//Make copies of items so valid value calculations aren't affected
 		for(Item i: items.values()){
 			items.put(i.name, new Item(i.name, i.weight));
 		}
+		//Compute Valid Values for each item
 		for(Item i: items.values()){
 			for(Bag b: bags.values()){
 				boolean consistent = b.assign(i);
@@ -192,6 +197,7 @@ public class Solver {
 				b.unassign(i.name);
 			}
 		}
+		//Forward Pruning - terminate if an item has no valid values
 		for(Item i: items.values()){
 			if(i.bags.size() == 0){
 				return false;
@@ -200,6 +206,7 @@ public class Solver {
 		Item[] temparray = new Item[items.size()];
 		temparray = (items.values().toArray(temparray));
 		ArrayList<Item> itemarray = new ArrayList<Item> (Arrays.asList(temparray));
+		//If MRV, sort array
 		if(type == SolverType.MRV){
 			Collections.sort(itemarray);
 		}
@@ -207,6 +214,7 @@ public class Solver {
 			Bag[] tempbarray = new Bag[i.bags.size()];
 			tempbarray = (i.bags.values().toArray(tempbarray));
 			ArrayList<Bag> bagarray = new ArrayList<Bag> (Arrays.asList(tempbarray));
+			//If LCV, sort bag array
 			if (type == SolverType.LEASTCONSTRAINING){
 				for(Bag b: bagarray){
 					b.assign(i);
